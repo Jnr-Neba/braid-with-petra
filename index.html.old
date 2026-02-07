@@ -14,6 +14,12 @@
 		
 		<!-- Custom Styles for New Features -->
 		<style>
+			/* Loading Spinner Animation */
+			@keyframes spin {
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
+			}
+			
 			/* Floating WhatsApp Button */
 			.whatsapp-float {
 				position: fixed;
@@ -191,6 +197,9 @@
         <li><a href="#services">Services</a></li>
         <li><a href="#portfolio">Our Work</a></li>
         <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#hours">Hours</a></li>
+        <li><a href="#faq">FAQ</a></li>
         <li><a href="#booking">Book Now</a></li>
         <li><a href="#contact">Contact</a></li>
     </ul>
@@ -577,6 +586,142 @@
     </div>
 </section>
 
+						<!-- Pricing Section -->
+						<section id="pricing" class="main special">
+    <div class="container">
+        <header class="major fade-in">
+            <h2>Our Pricing</h2>
+            <p>Quality services at competitive rates</p>
+        </header>
+
+        <div class="row gtr-150">
+            <div class="col-4 col-12-medium">
+                <div class="box" style="min-height: 250px;">
+                    <span class="icon solid major style1 fa-cut"></span>
+                    <h3>Braiding Services</h3>
+                    <p style="margin: 1.5em 0;">Box braids, cornrows, twists, and more. Prices vary based on style complexity and length.</p>
+                    <p style="font-weight: bold; color: #667eea;">Contact for Pricing</p>
+                </div>
+            </div>
+
+            <div class="col-4 col-12-medium">
+                <div class="box" style="min-height: 250px;">
+                    <span class="icon solid major style3 fa-paint-brush"></span>
+                    <h3>Hair Styling</h3>
+                    <p style="margin: 1.5em 0;">Professional cuts, coloring, and styling. Custom pricing based on your specific needs.</p>
+                    <p style="font-weight: bold; color: #667eea;">Contact for Pricing</p>
+                </div>
+            </div>
+
+            <div class="col-4 col-12-medium">
+                <div class="box" style="min-height: 250px;">
+                    <span class="icon solid major style5 fa-star"></span>
+                    <h3>Nail Services</h3>
+                    <p style="margin: 1.5em 0;">Beautiful nail art, manicures, and pedicures. Prices depend on design complexity.</p>
+                    <p style="font-weight: bold; color: #667eea;">Contact for Pricing</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="major" style="margin-top: 2em;">
+            <p><strong>📞 Call for a personalized quote based on your desired style</strong></p>
+            <ul class="actions special">
+                <li><a href="tel:+237651844664" class="button primary">Call for Quote</a></li>
+                <li><a href="https://wa.me/237651844664?text=Hi%2C%20I%27d%20like%20to%20know%20your%20prices" class="button" target="_blank">WhatsApp for Quote</a></li>
+            </ul>
+        </footer>
+    </div>
+</section>
+
+						<!-- Business Hours Section -->
+						<section id="hours" class="main special">
+    <div class="container">
+        <header class="major fade-in">
+            <h2>Business Hours</h2>
+            <p>Visit us during our operating hours</p>
+        </header>
+
+        <div class="box" style="max-width: 600px; margin: 0 auto; padding: 2em;">
+            <div style="display: flex; justify-content: space-between; padding: 1em 0; border-bottom: 2px solid #f0f0f0;">
+                <span style="font-weight: bold; color: #333;">Monday - Friday</span>
+                <span style="color: #667eea; font-weight: bold;">8:00 AM - 6:00 PM</span>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; padding: 1em 0; border-bottom: 2px solid #f0f0f0;">
+                <span style="font-weight: bold; color: #333;">Saturday</span>
+                <span style="color: #667eea; font-weight: bold;">9:00 AM - 4:00 PM</span>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; padding: 1em 0;">
+                <span style="font-weight: bold; color: #333;">Sunday</span>
+                <span style="color: #999; font-weight: bold;">Closed</span>
+            </div>
+        </div>
+
+        <footer class="major" style="margin-top: 2em;">
+            <p style="color: #666; font-size: 0.9em;">
+                📍 Located in Bonaberi, Douala, Cameroon<br>
+                ⏰ Appointments recommended to ensure availability
+            </p>
+            <ul class="actions special">
+                <li><a href="#booking" class="button primary">Book Appointment</a></li>
+            </ul>
+        </footer>
+    </div>
+</section>
+
+						<!-- FAQ Section -->
+						<section id="faq" class="main special">
+    <div class="container">
+        <header class="major fade-in">
+            <h2>Frequently Asked Questions</h2>
+            <p>Everything you need to know before your appointment</p>
+        </header>
+
+        <div style="max-width: 800px; margin: 0 auto; text-align: left;">
+            
+            <div class="box" style="margin-bottom: 1.5em;">
+                <h3 style="color: #667eea; margin-bottom: 0.5em;">❓ How long do braids last?</h3>
+                <p style="color: #666;">Typically 4-8 weeks depending on your hair type, care routine, and braid style. We provide care instructions to help you maintain your braids longer.</p>
+            </div>
+
+            <div class="box" style="margin-bottom: 1.5em;">
+                <h3 style="color: #667eea; margin-bottom: 0.5em;">❓ Do you provide the hair/extensions?</h3>
+                <p style="color: #666;">Yes! Hair extensions are included in the service price. We use high-quality synthetic and human hair. You can also bring your own if you prefer a specific brand or color.</p>
+            </div>
+
+            <div class="box" style="margin-bottom: 1.5em;">
+                <h3 style="color: #667eea; margin-bottom: 0.5em;">❓ How long does an appointment take?</h3>
+                <p style="color: #666;">Appointments typically take 2-4 hours depending on the style complexity and hair length. Box braids and detailed cornrows may take longer. We'll give you an estimated time when you book.</p>
+            </div>
+
+            <div class="box" style="margin-bottom: 1.5em;">
+                <h3 style="color: #667eea; margin-bottom: 0.5em;">❓ Do you accept walk-ins?</h3>
+                <p style="color: #666;">While we welcome walk-ins when available, appointments are strongly recommended to ensure we have time reserved for you. Call or WhatsApp to book ahead.</p>
+            </div>
+
+            <div class="box" style="margin-bottom: 1.5em;">
+                <h3 style="color: #667eea; margin-bottom: 0.5em;">❓ What's your cancellation policy?</h3>
+                <p style="color: #666;">Please provide at least 24 hours notice if you need to cancel or reschedule. This allows us to offer the time slot to other clients. Thank you for understanding!</p>
+            </div>
+
+            <div class="box" style="margin-bottom: 1.5em;">
+                <h3 style="color: #667eea; margin-bottom: 0.5em;">❓ Where exactly are you located in Bonaberi?</h3>
+                <p style="color: #666;">We're located in Bonaberi, Douala. The exact address and directions will be shared when you book your appointment via phone or WhatsApp for your convenience and privacy.</p>
+            </div>
+
+        </div>
+
+        <footer class="major" style="margin-top: 2em;">
+            <p><strong>Still have questions?</strong></p>
+            <ul class="actions special">
+                <li><a href="tel:+237651844664" class="button">Call Us</a></li>
+                <li><a href="https://wa.me/237651844664?text=Hi%2C%20I%20have%20a%20question%20about%20your%20services" class="button" target="_blank">WhatsApp Us</a></li>
+            </ul>
+        </footer>
+    </div>
+</section>
+
 						<!-- Booking Form Section -->
 						<section id="booking" class="main special">
     <div class="container">
@@ -659,9 +804,10 @@
         <h2>Get in Touch</h2>
         <p>Ready to book your appointment? Contact us today</p>
     </header>
-    <p><strong>Location:</strong> Bonaberi, Douala, Cameroon</p>
-    <p><strong>Phone:</strong> <a href="tel:+237651844664">+237 651 844 664</a></p>
-    <p><strong>Hours:</strong> Monday - Friday (Contact for pricing)</p>
+    <p><strong>📍 Location:</strong> Bonaberi, Douala, Cameroon</p>
+    <p><strong>📞 Phone:</strong> <a href="tel:+237651844664">+237 651 844 664</a></p>
+    <p><strong>💬 WhatsApp:</strong> <a href="https://wa.me/237651844664" target="_blank">+237 651 844 664</a></p>
+    <p><strong>⏰ Hours:</strong> Mon-Fri: 8am-6pm | Sat: 9am-4pm | Sun: Closed</p>
     <footer class="major">
         <ul class="actions special">
             <li><a href="tel:+237651844664" class="button primary">Call to Book</a></li>
@@ -709,8 +855,8 @@
 
 			<!-- Custom Scripts for New Features -->
 			<script>
-				// Booking Form - Send to WhatsApp
-				document.getElementById('bookingForm').addEventListener('submit', function(e) {
+				// Booking Form - Send to API then WhatsApp
+				document.getElementById('bookingForm').addEventListener('submit', async function(e) {
 					e.preventDefault();
 					
 					// Get form values
@@ -719,30 +865,90 @@
 					const service = document.getElementById('service').value;
 					const date = document.getElementById('date').value;
 					const time = document.getElementById('time').value || 'Not specified';
-					const message = document.getElementById('message').value || 'None';
+					const message = document.getElementById('message').value || '';
 					
-					// Create WhatsApp message
-					const whatsappMessage = `*New Booking Request*%0A%0A` +
-						`*Name:* ${encodeURIComponent(name)}%0A` +
-						`*Phone:* ${encodeURIComponent(phone)}%0A` +
-						`*Service:* ${encodeURIComponent(service)}%0A` +
-						`*Preferred Date:* ${encodeURIComponent(date)}%0A` +
-						`*Preferred Time:* ${encodeURIComponent(time)}%0A` +
-						`*Additional Notes:* ${encodeURIComponent(message)}%0A%0A` +
-						`Please confirm availability. Thank you! 💕`;
+					// Get submit button
+					const submitButton = this.querySelector('button[type="submit"]');
+					const originalButtonText = submitButton.innerHTML;
 					
-					// WhatsApp link
-					const whatsappNumber = '237651844664';
-					const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+					// Show loading state
+					submitButton.disabled = true;
+					submitButton.innerHTML = '<span style="display: inline-block; width: 20px; height: 20px; border: 3px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite;"></span> Sending...';
 					
-					// Open WhatsApp
-					window.open(whatsappURL, '_blank');
-					
-					// Reset form
-					this.reset();
-					
-					// Show confirmation
-					alert('Opening WhatsApp to send your booking request! 📱');
+					try {
+						// Send to API
+						const response = await fetch('https://m6cm8xx6s3.execute-api.ca-central-1.amazonaws.com/prod/booking', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							body: JSON.stringify({
+								name: name,
+								phone: phone,
+								service: service,
+								preferredDate: date,
+								preferredTime: time,
+								notes: message
+							})
+						});
+						
+						const result = await response.json();
+						
+						if (response.ok && result.success) {
+							// Success! Show message
+							alert('✅ Booking Confirmed!\n\nBooking ID: ' + result.bookingId + '\n\nWe\'ll confirm via WhatsApp within 24 hours. Opening WhatsApp now...');
+							
+							// Reset form
+							this.reset();
+							
+							// Open WhatsApp as confirmation
+							const whatsappMessage = `*Booking Confirmation*%0A%0A` +
+								`*Booking ID:* ${result.bookingId}%0A` +
+								`*Name:* ${encodeURIComponent(name)}%0A` +
+								`*Phone:* ${encodeURIComponent(phone)}%0A` +
+								`*Service:* ${encodeURIComponent(service)}%0A` +
+								`*Date:* ${encodeURIComponent(date)}%0A` +
+								`*Time:* ${encodeURIComponent(time)}%0A` +
+								`*Notes:* ${encodeURIComponent(message)}%0A%0A` +
+								`This booking has been saved to our system! 💕`;
+							
+							const whatsappNumber = '237651844664';
+							const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+							window.open(whatsappURL, '_blank');
+							
+						} else {
+							// API returned error
+							throw new Error(result.message || 'Booking failed');
+						}
+						
+					} catch (error) {
+						console.error('Booking error:', error);
+						
+						// Show error and offer WhatsApp fallback
+						const retry = confirm('❌ Unable to save booking online.\n\nError: ' + error.message + '\n\nWould you like to book via WhatsApp instead?');
+						
+						if (retry) {
+							// Fallback to WhatsApp only
+							const whatsappMessage = `*New Booking Request*%0A%0A` +
+								`*Name:* ${encodeURIComponent(name)}%0A` +
+								`*Phone:* ${encodeURIComponent(phone)}%0A` +
+								`*Service:* ${encodeURIComponent(service)}%0A` +
+								`*Date:* ${encodeURIComponent(date)}%0A` +
+								`*Time:* ${encodeURIComponent(time)}%0A` +
+								`*Notes:* ${encodeURIComponent(message)}%0A%0A` +
+								`Please confirm availability. Thank you! 💕`;
+							
+							const whatsappNumber = '237651844664';
+							const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+							window.open(whatsappURL, '_blank');
+							
+							this.reset();
+						}
+					} finally {
+						// Reset button
+						submitButton.disabled = false;
+						submitButton.innerHTML = originalButtonText;
+					}
 				});
 				
 				// Smooth Scroll Animations
