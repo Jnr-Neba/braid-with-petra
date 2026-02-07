@@ -1,0 +1,8 @@
+
+# Lambda files
+lambda-booking/node_modules/
+lambda-booking/function.zip
+lambda-booking/response.json
+lambda-booking/test-booking.json
+lambda-booking/trust-policy.json
+lambda-booking/dynamodb-policy.json
