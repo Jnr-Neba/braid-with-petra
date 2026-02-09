@@ -1,5 +1,10 @@
+# Git files
+.git/
 
-# Lambda files
+# Mac files
+.DS_Store
+
+# Lambda files (already have these but making sure)
 lambda-booking/node_modules/
 lambda-booking/function.zip
 lambda-booking/response.json
