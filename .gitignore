@@ -11,3 +11,4 @@ lambda-booking/response.json
 lambda-booking/test-booking.json
 lambda-booking/trust-policy.json
 lambda-booking/dynamodb-policy.json
+*.backup*
