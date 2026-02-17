@@ -124,7 +124,7 @@ resource "aws_cloudfront_distribution" "website" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = "arn:aws:acm:us-east-1:YOUR_ACCOUNT_ID:certificate/YOUR_CERT_ID"
+    acm_certificate_arn      = var.acm_certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
@@ -140,28 +140,20 @@ resource "aws_cloudfront_distribution" "website" {
     Environment = "Production"
     ManagedBy   = "Terraform"
   }
+   lifecycle {
+    ignore_changes = [web_acl_id, price_class]
+  }
 }
 
 # DynamoDB Table for form submissions
 resource "aws_dynamodb_table" "form_submissions" {
-  name         = "braid-form-submissions"
+  name         = "braidwithpetra-bookings"
   billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "id"
+  hash_key     = "bookingId"
   
   attribute {
-    name = "id"
+    name = "bookingId"
     type = "S"
-  }
-  
-  attribute {
-    name = "timestamp"
-    type = "N"
-  }
-  
-  global_secondary_index {
-    name            = "timestamp-index"
-    hash_key        = "timestamp"
-    projection_type = "ALL"
   }
 
   tags = {
@@ -173,7 +165,7 @@ resource "aws_dynamodb_table" "form_submissions" {
 
 # IAM Role for Lambda function
 resource "aws_iam_role" "lambda_role" {
-  name = "braid-lambda-role"
+  name = "BraidWithPetraLambdaRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -196,7 +188,7 @@ resource "aws_iam_role" "lambda_role" {
 
 # IAM Policy for Lambda
 resource "aws_iam_role_policy" "lambda_policy" {
-  name = "braid-lambda-policy"
+  name = "DynamoDBAccessPolicy"
   role = aws_iam_role.lambda_role.id
 
   policy = jsonencode({
@@ -231,7 +223,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
 # Lambda Function
 resource "aws_lambda_function" "form_handler" {
   filename      = "lambda_function.zip"
-  function_name = "braid-form-handler"
+  function_name = "braidwithpetra-booking-handler"
   role          = aws_iam_role.lambda_role.arn
   handler       = "index.handler"
   runtime       = "nodejs20.x"
@@ -248,6 +240,9 @@ resource "aws_lambda_function" "form_handler" {
     Name        = "Braid Form Handler"
     Environment = "Production"
     ManagedBy   = "Terraform"
+  }
+  lifecycle {
+    ignore_changes = [filename, source_code_hash]
   }
 }
 
