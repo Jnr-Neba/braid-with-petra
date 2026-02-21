@@ -29,3 +29,18 @@ CloudWatch monitoring for Braid with Petra production infrastructure.
 - Day 2: Add DynamoDB metrics
 - Day 2: Add CloudFront metrics
 - Day 3: Configure SNS alerts
+
+## Day 2 Complete (Feb 21, 2026)
+- Added DynamoDB capacity metrics
+- Added CloudFront request metrics
+- Complete visibility: User → CloudFront → Lambda → DynamoDB
+
+### Current Dashboard Widgets
+**Lambda:** Invocations, Duration, Errors, Throttles
+**DynamoDB:** ConsumedReadCapacityUnits, ConsumedWriteCapacityUnits
+**CloudFront:** Requests, Error Rates (4xx/5xx)
+
+### Health Status
+- Lambda: Healthy (0 errors, 0 throttles)
+- DynamoDB: Healthy (minimal usage)
+- CloudFront: Active (traffic detected)
