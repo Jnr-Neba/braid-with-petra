@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - staging
   pull_request:
   workflow_dispatch:
 
@@ -47,13 +48,16 @@ jobs:
         if: always()
         run: |
           echo "✅ Security scans completed"
-          echo "📊 Check the Security tab for detailed results"
 
-  deploy:
-    name: Deploy to Production
+  deploy-staging:
+    name: Deploy to Staging
     needs: security-scan
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
+    
+    environment: 
+      name: staging
+      url: http://staging-braidwithpetra.ca.s3-website.ca-central-1.amazonaws.com
     
     steps:
       - name: Checkout code
@@ -66,11 +70,47 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       
-      - name: Deploy to S3
+      - name: Deploy to Staging S3
         run: |
-          aws s3 cp index.html s3://braidwithpetra.ca/ --cache-control "max-age=300"
-          aws s3 sync images/ s3://braidwithpetra.ca/images/ --delete --cache-control "max-age=31536000"
-          aws s3 sync assets/ s3://braidwithpetra.ca/assets/ --delete --cache-control "max-age=31536000"
+          echo "🚀 Deploying to STAGING environment"
+          aws s3 cp index.html s3://${{ secrets.S3_BUCKET }}/ --cache-control "max-age=300"
+          aws s3 sync images/ s3://${{ secrets.S3_BUCKET }}/images/ --delete --cache-control "max-age=31536000"
+          aws s3 sync assets/ s3://${{ secrets.S3_BUCKET }}/assets/ --delete --cache-control "max-age=31536000"
+      
+      - name: Deployment complete
+        run: |
+          echo "✅ Deployed to STAGING"
+          echo "🌍 URL: http://staging-braidwithpetra.ca.s3-website.ca-central-1.amazonaws.com"
+          echo "📦 Commit: ${{ github.sha }}"
+          echo "👤 Deployed by: ${{ github.actor }}"
+
+  deploy-production:
+    name: Deploy to Production
+    needs: security-scan
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    environment: 
+      name: production
+      url: https://www.braidwithpetra.ca
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      
+      - name: Deploy to Production S3
+        run: |
+          echo "🚀 Deploying to PRODUCTION environment"
+          aws s3 cp index.html s3://${{ secrets.S3_BUCKET }}/ --cache-control "max-age=300"
+          aws s3 sync images/ s3://${{ secrets.S3_BUCKET }}/images/ --delete --cache-control "max-age=31536000"
+          aws s3 sync assets/ s3://${{ secrets.S3_BUCKET }}/assets/ --delete --cache-control "max-age=31536000"
       
       - name: Invalidate CloudFront cache
         run: |
@@ -84,6 +124,7 @@ jobs:
       
       - name: Deployment complete
         run: |
-          echo "✅ Deployed to https://www.braidwithpetra.ca"
+          echo "✅ Deployed to PRODUCTION"
+          echo "🌍 URL: https://www.braidwithpetra.ca"
           echo "📦 Commit: ${{ github.sha }}"
           echo "👤 Deployed by: ${{ github.actor }}"
