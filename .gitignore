@@ -1,14 +1,50 @@
-# Git files
-.git/
-
-# Mac files
+# OS Files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Lambda files (already have these but making sure)
-lambda-booking/node_modules/
-lambda-booking/function.zip
-lambda-booking/response.json
-lambda-booking/test-booking.json
-lambda-booking/trust-policy.json
-lambda-booking/dynamodb-policy.json
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node
+node_modules/
+npm-debug.log
+package-lock.json
+
+# AWS
+*.zip
+function.zip
+
+# Backup files
 *.backup*
+*.bak
+*.old
+
+# Temporary files
+*.tmp
+*.temp
+.temp/
+
+# Lambda deployment
+lambda/*/function.zip
+lambda/*/node_modules/
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+config.json
+
+# Generated files
+dist/
+build/

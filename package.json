@@ -1,0 +1,16 @@
+{
+  "name": "braid-with-petra",
+  "version": "1.0.0",
+  "description": "Braid with Petra website with automated testing",
+  "scripts": {
+    "test": "jest",
+    "test:lambda": "cd lambda-booking && npm test",
+    "test:html": "jest tests/html-validation.test.js",
+    "test:all": "npm run test:lambda && npm run test:html",
+    "test:coverage": "cd lambda-booking && npm run test:coverage"
+  },
+  "devDependencies": {
+    "html-validate": "^8.26.0",
+    "jest": "^29.7.0"
+  }
+}

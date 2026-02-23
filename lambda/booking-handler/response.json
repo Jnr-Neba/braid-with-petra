@@ -1,0 +1,1 @@
+{"statusCode":200,"headers":{"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Methods":"POST, OPTIONS"},"body":"{\"success\":true,\"bookingId\":\"35f3f645-51fe-4b26-8722-a172e50ed70b\",\"message\":\"Booking created!\"}"}

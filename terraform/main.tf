@@ -1,7 +1,6 @@
 # Terraform Configuration for Braid with Petra
-# This file defines all AWS infrastructure as code
+# Multi-environment setup using workspaces
 
-# Specify required Terraform version and providers
 terraform {
   required_version = ">= 1.0"
   
@@ -13,23 +12,22 @@ terraform {
   }
 }
 
-# Configure the AWS Provider
 provider "aws" {
-  region = "ca-central-1"
+  region = var.aws_region
 }
 
 # S3 Bucket for website hosting
 resource "aws_s3_bucket" "website" {
-  bucket = "braidwithpetra.ca"
+  bucket = local.bucket_name
   
   tags = {
-    Name        = "Braid with Petra Website"
-    Environment = "Production"
+    Name        = "Braid with Petra Website - ${local.environment}"
+    Environment = local.environment
     ManagedBy   = "Terraform"
   }
 }
 
-# Enable static website hosting on the bucket
+# Enable static website hosting
 resource "aws_s3_bucket_website_configuration" "website" {
   bucket = aws_s3_bucket.website.id
 
@@ -46,17 +44,20 @@ resource "aws_s3_bucket_website_configuration" "website" {
 resource "aws_s3_bucket_public_access_block" "website" {
   bucket = aws_s3_bucket.website.id
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  block_public_acls       = local.use_cloudfront
+  block_public_policy     = local.use_cloudfront
+  ignore_public_acls      = local.use_cloudfront
+  restrict_public_buckets = local.use_cloudfront
 }
 
-# Bucket policy to allow CloudFront to read objects
+# Bucket policy
 resource "aws_s3_bucket_policy" "website" {
   bucket = aws_s3_bucket.website.id
 
-  policy = jsonencode({
+  # Wait for public access block to be configured
+  depends_on = [aws_s3_bucket_public_access_block.website]
+
+  policy = local.use_cloudfront ? jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
@@ -69,43 +70,57 @@ resource "aws_s3_bucket_policy" "website" {
         Resource = "${aws_s3_bucket.website.arn}/*"
         Condition = {
           StringEquals = {
-            "AWS:SourceArn" = aws_cloudfront_distribution.website.arn
+            "AWS:SourceArn" = aws_cloudfront_distribution.website[0].arn
           }
         }
+      }
+    ]
+  }) : jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "PublicReadGetObject"
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.website.arn}/*"
       }
     ]
   })
 }
 
-# CloudFront Origin Access Control (OAC)
+# CloudFront Origin Access Control (production only)
 resource "aws_cloudfront_origin_access_control" "website" {
-  name                              = "braidwithpetra-oac"
-  description                       = "OAC for Braid with Petra website"
+  count = local.use_cloudfront ? 1 : 0
+
+  name                              = "${local.environment}-braidwithpetra-oac"
+  description                       = "OAC for Braid with Petra ${local.environment}"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
 }
 
-# CloudFront Distribution (your CDN)
+# CloudFront Distribution (production only)
 resource "aws_cloudfront_distribution" "website" {
+  count = local.use_cloudfront ? 1 : 0
+
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "Braid with Petra website distribution"
+  comment             = "Braid with Petra ${local.environment} distribution"
   default_root_object = "index.html"
-  price_class         = "PriceClass_100"
 
-  aliases = ["www.braidwithpetra.ca", "braidwithpetra.ca"]
+  aliases = local.domain_names
 
   origin {
     domain_name              = aws_s3_bucket.website.bucket_regional_domain_name
-    origin_id                = "S3-braidwithpetra"
-    origin_access_control_id = aws_cloudfront_origin_access_control.website.id
+    origin_id                = "S3-${local.environment}-braidwithpetra"
+    origin_access_control_id = aws_cloudfront_origin_access_control.website[0].id
   }
 
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "S3-braidwithpetra"
+    target_origin_id       = "S3-${local.environment}-braidwithpetra"
     viewer_protocol_policy = "redirect-to-https"
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     compress               = true
@@ -136,18 +151,19 @@ resource "aws_cloudfront_distribution" "website" {
   }
 
   tags = {
-    Name        = "Braid with Petra CDN"
-    Environment = "Production"
+    Name        = "Braid with Petra CDN - ${local.environment}"
+    Environment = local.environment
     ManagedBy   = "Terraform"
   }
-   lifecycle {
+
+  lifecycle {
     ignore_changes = [web_acl_id, price_class]
   }
 }
 
-# DynamoDB Table for form submissions
+# DynamoDB Table
 resource "aws_dynamodb_table" "form_submissions" {
-  name         = "braidwithpetra-bookings"
+  name         = local.table_name
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "bookingId"
   
@@ -157,15 +173,17 @@ resource "aws_dynamodb_table" "form_submissions" {
   }
 
   tags = {
-    Name        = "Braid Form Submissions"
-    Environment = "Production"
+    Name        = "Braid Form Submissions - ${local.environment}"
+    Environment = local.environment
     ManagedBy   = "Terraform"
   }
 }
 
-# IAM Role for Lambda function
+# IAM Role for Lambda (production only)
 resource "aws_iam_role" "lambda_role" {
-  name = "BraidWithPetraLambdaRole"
+  count = local.create_lambda ? 1 : 0
+  
+  name = "${local.environment}-BraidWithPetraLambdaRole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -181,15 +199,17 @@ resource "aws_iam_role" "lambda_role" {
   })
 
   tags = {
-    Name      = "Braid Lambda Role"
+    Name      = "Braid Lambda Role - ${local.environment}"
     ManagedBy = "Terraform"
   }
 }
 
-# IAM Policy for Lambda
+# IAM Policy for Lambda (production only)
 resource "aws_iam_role_policy" "lambda_policy" {
-  name = "DynamoDBAccessPolicy"
-  role = aws_iam_role.lambda_role.id
+  count = local.create_lambda ? 1 : 0
+  
+  name = "${local.environment}-DynamoDBAccessPolicy"
+  role = aws_iam_role.lambda_role[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -220,102 +240,32 @@ resource "aws_iam_role_policy" "lambda_policy" {
   })
 }
 
-# Lambda Function
+# Lambda Function (production only)
 resource "aws_lambda_function" "form_handler" {
+  count = local.create_lambda ? 1 : 0
+  
   filename      = "lambda_function.zip"
-  function_name = "braidwithpetra-booking-handler"
-  role          = aws_iam_role.lambda_role.arn
+  function_name = local.lambda_name
+  role          = aws_iam_role.lambda_role[0].arn
   handler       = "index.handler"
-  runtime       = "nodejs20.x"
-  timeout       = 10
-  memory_size   = 128
+  runtime       = var.lambda_runtime
+  timeout       = var.lambda_timeout
+  memory_size   = var.lambda_memory_size
 
   environment {
     variables = {
       DYNAMODB_TABLE = aws_dynamodb_table.form_submissions.name
+      ENVIRONMENT    = local.environment
     }
   }
 
   tags = {
-    Name        = "Braid Form Handler"
-    Environment = "Production"
+    Name        = "Braid Form Handler - ${local.environment}"
+    Environment = local.environment
     ManagedBy   = "Terraform"
   }
+
   lifecycle {
     ignore_changes = [filename, source_code_hash]
-  }
-}
-
-# API Gateway REST API
-resource "aws_api_gateway_rest_api" "form_api" {
-  name        = "braid-form-api"
-  description = "API for Braid with Petra form submissions"
-
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
-
-  tags = {
-    Name      = "Braid Form API"
-    ManagedBy = "Terraform"
-  }
-}
-
-# API Gateway Resource
-resource "aws_api_gateway_resource" "submit" {
-  rest_api_id = aws_api_gateway_rest_api.form_api.id
-  parent_id   = aws_api_gateway_rest_api.form_api.root_resource_id
-  path_part   = "submit"
-}
-
-# API Gateway Method
-resource "aws_api_gateway_method" "submit_post" {
-  rest_api_id   = aws_api_gateway_rest_api.form_api.id
-  resource_id   = aws_api_gateway_resource.submit.id
-  http_method   = "POST"
-  authorization = "NONE"
-}
-
-# API Gateway Integration
-resource "aws_api_gateway_integration" "lambda_integration" {
-  rest_api_id             = aws_api_gateway_rest_api.form_api.id
-  resource_id             = aws_api_gateway_resource.submit.id
-  http_method             = aws_api_gateway_method.submit_post.http_method
-  integration_http_method = "POST"
-  type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.form_handler.invoke_arn
-}
-
-# Lambda permission
-resource "aws_lambda_permission" "api_gateway" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.form_handler.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.form_api.execution_arn}/*/*"
-}
-
-# API Gateway Deployment
-resource "aws_api_gateway_deployment" "form_api" {
-  rest_api_id = aws_api_gateway_rest_api.form_api.id
-
-  depends_on = [
-    aws_api_gateway_integration.lambda_integration
-  ]
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-# API Gateway Stage
-resource "aws_api_gateway_stage" "prod" {
-  deployment_id = aws_api_gateway_deployment.form_api.id
-  rest_api_id   = aws_api_gateway_rest_api.form_api.id
-  stage_name    = "prod"
-
-  tags = {
-    Name      = "Production Stage"
-    ManagedBy = "Terraform"
   }
 }
