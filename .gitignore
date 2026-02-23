@@ -48,3 +48,19 @@ config.json
 # Generated files
 dist/
 build/
+
+# Testing
+coverage/
+*.test.js.snap
+.htmlvalidate.json
+
+# Node modules
+node_modules/
+lambda-booking/node_modules/
+lambda/booking-handler/node_modules/
+
+# macOS
+.DS_Store
+
+# Screenshots (don't commit to repo)
+*.png
