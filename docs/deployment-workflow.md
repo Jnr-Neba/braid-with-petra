@@ -79,3 +79,30 @@ git push  # Auto-deploys to production
 - Production: $0/month (free tier)
 - Staging: $0/month (free tier)
 - **Total: $0/month**
+
+## Automated Testing (Added Feb 23, 2026)
+
+### Test Suite
+- Lambda unit tests: 7 tests, 100% coverage
+- HTML structural validation
+- Integrated as CI/CD blocking gates
+
+### Execution
+Tests run automatically on every push:
+1. Security scans complete
+2. Automated tests execute
+3. Deployment proceeds only if tests pass
+
+### Local Testing
+```bash
+# Lambda tests
+cd lambda-booking && npm test
+
+# HTML validation  
+npm run test:html
+
+# All tests
+npm run test:all
+```
+
+Test failures block deployment automatically - no exceptions.

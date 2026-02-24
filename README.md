@@ -76,3 +76,36 @@ braid-with-petra/
 
 14 days, 14 features, $0 cost.  
 Valentine's gift that lasts. 💝
+
+## Automated Testing
+
+### Test Suite
+- **Lambda Unit Tests:** 7 tests, 100% coverage
+- **HTML Validation:** Structural validation
+- **Framework:** Jest + html-validate
+
+### Running Tests
+```bash
+# Lambda tests with coverage
+cd lambda-booking && npm run test:coverage
+
+# HTML validation
+npm run test:html
+
+# All tests
+npm run test:all
+```
+
+### CI/CD Integration
+Tests run automatically in GitHub Actions pipeline:
+```
+Security Scanning → Automated Tests → Deployment
+```
+
+Test failures block deployment.
+
+## Documentation
+- [Testing Documentation](docs/testing.md)
+- [Deployment Workflow](docs/deployment-workflow.md)
+- [Staging Environment](docs/staging-environment.md)
+- [Monitoring Setup](docs/monitoring.md)
